@@ -186,7 +186,7 @@ local function doinstruction(env,words)
 end
 
 function tpscript.formatsrc(src) -- It would get so messy if i put all this on tpscript.loadstring function
-	local lines = src:gsub("\n", ""):split(";")
+	local lines = src:gsub("\n;", ";"):gsub("\n", ";"):split(";")--src:gsub("\n", ""):split(";")
 	for i = 1, #lines do
 		lines[i] = lines[i]:gsub("^%s*", "")
 	end

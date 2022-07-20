@@ -187,7 +187,7 @@ local function doinstruction(env,v)
 end
 
 function tpscript.loadstring(src, useglobal)
-	local lines = src:split(";")
+	local lines = src:gsub("\n", ""):split(";")
 	local env = setmetatable({}, {__index = getfenv(0)})
 
 	if useglobal then

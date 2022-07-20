@@ -164,8 +164,7 @@ tpscript.instructions = {
 
 tpscript.globalenv = setmetatable({}, {__index = getfenv(0)})
 
-local function doinstruction(env,v)
-	local words = v:split(' ')
+local function doinstruction(env,words)
 	local args = {}
 	for i = 2, #words do
 		table.insert(args, words[i])
@@ -223,6 +222,9 @@ function tpscript.loadstring(src, useglobal)
 	local n = 1
 	while lines[n] do
 		local words = lines[n]:split(' ')
+		for i = 1, #words do
+			words[i] = words[i]:gsub("$space", " "):gsub("$\\space", "$space") -- couldn't find a better way to do this, tell me if you do
+		end
 		if words[1] == "jmpif" then
 			local varcompare = words[2]
 			local label = words[3]
@@ -235,7 +237,7 @@ function tpscript.loadstring(src, useglobal)
 				n = points[label] - 1
 			end
 		else
-			doinstruction(env, lines[n])
+			doinstruction(env, words)
 		end
 		n = n + 1
 	end

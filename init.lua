@@ -186,8 +186,16 @@ local function doinstruction(env,v)
 	end
 end
 
-function tpscript.loadstring(src, useglobal)
+function tpscript.formatsrc(src) -- It would get so messy if i put all this on tpscript.loadstring function
 	local lines = src:gsub("\n", ""):split(";")
+	for i = 1, #lines do
+		lines[i] = lines[i]:gsub("^%s*", "")
+	end
+	return lines
+end
+
+function tpscript.loadstring(src, useglobal)
+	local lines = tpscript.formatsrc(src)
 	local env = setmetatable({}, {__index = getfenv(0)})
 
 	if useglobal then

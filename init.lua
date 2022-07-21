@@ -172,7 +172,11 @@ tpscript.instructions = {
 	end,
 	len = function(env,writeto,var)
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
-		env[writeto] = #tostring(v)
+		if type(v) ~= "table" then
+			env[writeto] = #tostring(v)
+		else
+			env[writeto] = #v
+		end
 	end
 }
 

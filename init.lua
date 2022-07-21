@@ -73,15 +73,18 @@ tpscript.instructions = {
 		local a = env[var] or tonumber(var) or 0
 		local b = env[val] or tpscript.getthing(env, val) or tonumber(val)
 
+		local tv = tonumber(env[var])
+		local tl = tonumber(env[val])
+
 		if env[var] then
-			if tonumber(env[var]) then
-				a = tonumber(env[var])
+			if tv then
+				a = tv
 			end
 		end
 
 		if env[val] then
-			if tonumber(env[val]) then
-				b = tonumber(env[val])
+			if tl then
+				b = tl
 			end
 		end
 

@@ -70,43 +70,28 @@ end
 
 tpscript.instructions = {
 	add = function(env, var, val)
-		local a = env[var] or tonumber(var) or 0
-		local b = env[val] or tpscript.getthing(env, val) or tonumber(val)
-
-		local tv = tonumber(env[var])
-		local tl = tonumber(env[val])
-
-		if env[var] then
-			if tv then
-				a = tv
-			end
+		if not env[var] then
+			env[var] = 0
 		end
-
-		if env[val] then
-			if tl then
-				b = tl
-			end
-		end
-
-		env[var] = a + b
+		env[var] = env[var] + (tonumber(val) or env[val] or val)
 	end,
 	sub = function(env, var, val)
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] -= tonumber(val) or env[val] or val
+		env[var] = env[var] - (tonumber(val) or env[val] or val)
 	end,
 	mul = function(env, var, val)
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] *= tonumber(val) or env[val] or val
+		env[var] = env[var] * (tonumber(val) or env[val] or val)
 	end,
 	div = function(env, var, val)
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] /= tonumber(val) or env[val] or val
+		env[var] = env[var] / (tonumber(val) or env[val] or val)
 	end,
 	copy = function(env, var, var1)
 		if not env[var] then

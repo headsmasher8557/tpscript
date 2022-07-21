@@ -24,15 +24,25 @@ function tpscript.getthing(env, str)
 	local token = str:split'.'
 	local tar = getfenv(0)
 	for i,v in pairs(token) do
+		local tn = tonumber(v)
 		if tar[v] then
 			tar = tar[v]
+		elseif tn then
+			if tar[tn] then
+				tar = tar[tn]
+			end
 		end
 	end
 	if tar == getfenv(0) then
 		tar = env
 		for i,v in pairs(token) do
+			local tn = tonumber(v)
 			if tar[v] then
 				tar = tar[v]
+			elseif tn then
+				if tar[tn] then
+					tar = tar[tn]
+				end
 			end
 		end
 		if tar == env then

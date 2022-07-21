@@ -159,7 +159,21 @@ tpscript.instructions = {
 	clrenv = function(env)
 		table.clear(env)
 	end,
-	cmt = function() end -- Yes, you need a semicolon for comments.
+	cmt = function() end,
+	grt = function(env,writeto,var,var1)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local v1 = (tonumber(var1) or env[var1]) or tpscript.getthing(env,var1) or var1
+		env[writeto] = v > v1
+	end,
+	les = function(env,writeto,var,var1)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local v1 = (tonumber(var1) or env[var1]) or tpscript.getthing(env,var1) or var1
+		env[writeto] = v < v1
+	end,
+	len = function(env,writeto,var)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		env[writeto] = #tostring(v)
+	end
 }
 
 tpscript.globalenv = setmetatable({}, {__index = getfenv(0)})

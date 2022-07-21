@@ -180,6 +180,29 @@ tpscript.instructions = {
 		local v1 = (tonumber(var1) or env[var1]) or tpscript.getthing(env,var1) or var1
 		env[writeto] = v < v1
 	end,
+	chk = function(env,writeto,typ,var,val)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local l = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
+		-- smiley face to prevent "argument #1 is nil" :D
+		local tv, tl = (type(v or ":D") == "number" and v or tonumber(v)), (type(l or ":D") == "number" and l or tonumber(l))
+		if tv and tl then
+			if typ == '$equ' then
+				env[writeto] = tv == tl
+			elseif typ == '$grt' then
+				env[writeto] = tv > tl
+			elseif typ == '$lss' then
+				env[writeto] = tv < tl
+			elseif typ == '$egrt' then
+				env[writeto] = tv >= tl
+			elseif typ == '$elss' then
+				env[writeto] = tv <= tl
+			end
+		elseif type(v) == "string" then
+			if typ == '$equ' then
+				env[writeto] = env[var] == val
+			end
+		end
+	end,
 	len = function(env,writeto,var)
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
 		if type(v) ~= "table" then

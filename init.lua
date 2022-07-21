@@ -1,6 +1,6 @@
 local tpscript = {}
 
-if (_VERSION ~= "Luau") or (not string.split) then
+if (_VERSION ~= "Luau") then
 	local canwrite = pcall(function()
 		string.split = "abc" -- setting to random thing just to see if we can write
 	end)
@@ -15,6 +15,15 @@ if (_VERSION ~= "Luau") or (not string.split) then
 			end
 			return t
 		end
+	else
+		error("Can't add split function, string library is read-only")
+	end
+
+	local canwrite = pcall(function()
+		table.unpack = unpack -- setting to random thing just to see if we can write
+	end)
+	if canwrite then
+		-- yes
 	else
 		error("Can't add split function, string library is read-only")
 	end

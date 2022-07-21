@@ -23,6 +23,7 @@ end
 function tpscript.getthing(env, str)
 	local token = str:split'.'
 	local tar = getfenv(0)
+	local fail = false
 	for i,v in pairs(token) do
 		local tn = tonumber(v)
 		if tar[v] then
@@ -31,10 +32,14 @@ function tpscript.getthing(env, str)
 			if tar[tn] then
 				tar = tar[tn]
 			end
+		else
+			fail = true
+			break
 		end
 	end
-	if tar == getfenv(0) then
+	if fail then
 		tar = env
+		fail = false
 		for i,v in pairs(token) do
 			local tn = tonumber(v)
 			if tar[v] then
@@ -43,9 +48,11 @@ function tpscript.getthing(env, str)
 				if tar[tn] then
 					tar = tar[tn]
 				end
+			else
+				fail = true
 			end
 		end
-		if tar == env then
+		if fail then
 			tar = nil
 		end
 	end
@@ -139,7 +146,7 @@ tpscript.instructions = {
 			end
 		end
 		local i = table.concat(a, " ")
-		local v = tpscript.getthing(env, i)
+		local v = (tonumber(i) or env[i]) or tpscript.getthing(env,i) or i
 		i = v or i
 		env[var][index] = i
 	end,
@@ -199,7 +206,7 @@ tpscript.instructions = {
 			end
 		elseif type(v) == "string" then
 			if typ == '$equ' then
-				env[writeto] = env[var] == val
+				env[writeto] = v == l
 			end
 		end
 	end,

@@ -109,7 +109,7 @@ tpscript.instructions = {
 		env[var] = env[var1]
 	end,
 	call = function(env, var, ...)
-		local args = table.pack(...)
+		local args = {...}
 		local a = {}
 		for i,v in pairs(args) do
 			if i ~= "n" then
@@ -119,7 +119,7 @@ tpscript.instructions = {
 		tpscript.getthing(env,var)(table.unpack(a))
 	end,
 	callset = function(env, towrite, var, ...)
-		local args = table.pack(...)
+		local args = {...}
 		local a = {}
 		for i,v in pairs(args) do
 			if i ~= "n" then
@@ -135,7 +135,7 @@ tpscript.instructions = {
 		print(text)
 	end,
 	setindex = function(env,var,index,...)
-		local args = table.pack(...)
+		local args = {...}
 		local a = {}
 		for i,v in pairs(args) do
 			if i ~= "n" then

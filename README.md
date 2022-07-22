@@ -38,6 +38,4 @@ log a;
 
 ## Notes
 
-**Any code from before [this commit](https://github.com/headsmasher8557/tpscript/commit/7863109923f0b695d93e26032199756caf135819) will NOT run on Lua 5.1, but will run on Luau.** You shouldn't worry about compatibility after the commit, though. (This was just an oversight!)
-
 If your Lua enviroment does not have a split function, the interpreter will attempt to add one to the string library and will error if it fails.

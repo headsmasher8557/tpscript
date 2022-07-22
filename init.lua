@@ -275,25 +275,60 @@ function tpscript.loadstring(src, useglobal)
 		end
 	end
 
+	local makingvf = false
+	local vfuncsetting = {writeto = nil,args = nil,source = ""}
+
 	local n = 1
 	while lines[n] do
 		local words = lines[n]:split(' ')
 		for i = 1, #words do
 			words[i] = words[i]:gsub("$space", " "):gsub("$\\space", "$space") -- couldn't find a better way to do this, tell me if you do
 		end
-		if words[1] == "jmpif" then
-			local varcompare = words[2]
-			local label = words[3]
-			if points[label] and env[varcompare] then
-				n = points[label] - 1
+		if not makingvf then
+			if words[1] == "jmpif" then
+				local varcompare = words[2]
+				local label = words[3]
+				if points[label] and env[varcompare] then
+					n = points[label] - 1
+				end
+			elseif words[1] == "jmp" then
+				local label = words[2]
+				if points[label] then
+					n = points[label] - 1
+				end
+			elseif words[1] == "makevirtualfunction" then
+				local writeto = words[2]
+				local args = {}
+				for i = 3, #words do
+					table.insert(args, words[i])
+				end
+				vfuncsetting.writeto = writeto
+				vfuncsetting.args = args
+
+				makingvf = true
+			else
+				doinstruction(env, words)
 			end
-		elseif words[1] == "jmp" then
-			local label = words[2]
-			if points[label] then
-				n = points[label] - 1
-			end
+		elseif lines[n] ~= "\\*" then
+			vfuncsetting.source = vfuncsetting.source .. lines[n] .. "\n"
 		else
-			doinstruction(env, words)
+			makingvf = false
+			local source = vfuncsetting.source
+			local arglist = vfuncsetting.args
+			env[vfuncsetting.writeto] = function(...)
+				local argtable = {}
+				local a = {...}
+				local e = {}
+				for i = 1, #arglist do
+					e[arglist[i]] = a[i]
+				end
+				local nenv = setmetatable(e, {
+					__index = env,
+					__newindex = env
+				})
+				tpscript.loadstring(source, nenv)
+			end
+			vfuncsetting = {writeto = nil,args = nil,source = ""}
 		end
 		n = n + 1
 	end

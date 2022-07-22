@@ -251,7 +251,9 @@ function tpscript.loadstring(src, useglobal)
 	local lines = tpscript.formatsrc(src)
 	local env = setmetatable({}, {__index = getfenv(0)})
 
-	if useglobal then
+	if type(useglobal) == "table" then
+		env = useglobal 
+	elseif useglobal then
 		env = tpscript.globalenv
 	end
 

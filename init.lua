@@ -2,9 +2,6 @@ local tpscript = {}
 
 if (_VERSION ~= "Luau") then
 	local canwrite = pcall(function()
-		string.split = "abc" -- setting to random thing just to see if we can write
-	end)
-	if canwrite then
 		function string:split(sep)
 			if not sep then
 				return self
@@ -15,17 +12,16 @@ if (_VERSION ~= "Luau") then
 			end
 			return t
 		end
-	else
+	end)
+	if not canwrite then
 		error("Can't add split function, string library is read-only")
 	end
 
 	local canwrite = pcall(function()
-		table.unpack = unpack -- setting to random thing just to see if we can write
+		table.unpack = unpack
 	end)
-	if canwrite then
-		-- yes
-	else
-		error("Can't add split function, string library is read-only")
+	if not canwrite then
+		error("Can't add split function, table library is read-only")
 	end
 end
 
@@ -296,7 +292,7 @@ function tpscript.loadstring(src, useglobal)
 				if points[label] then
 					n = points[label] - 1
 				end
-			elseif words[1] == "makevirtualfunction" then
+			elseif words[1] == "makevirtualfunction" or words[1] == "mvf" then
 				local writeto = words[2]
 				local args = {}
 				for i = 3, #words do

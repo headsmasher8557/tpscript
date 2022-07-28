@@ -78,25 +78,37 @@ tpscript.instructions = {
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] = env[var] + (tonumber(val) or env[val] or val)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
+		
+		env[var] = v + v1
 	end,
 	sub = function(env, var, val)
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] = env[var] - (tonumber(val) or env[val] or val)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
+		
+		env[var] = v - v1
 	end,
 	mul = function(env, var, val)
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] = env[var] * (tonumber(val) or env[val] or val)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
+		
+		env[var] = v * v1
 	end,
 	div = function(env, var, val)
 		if not env[var] then
 			env[var] = 0
 		end
-		env[var] = env[var] / (tonumber(val) or env[val] or val)
+		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
+		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
+		
+		env[var] = v / v1
 	end,
 	copy = function(env, var, var1)
 		if not env[var] then

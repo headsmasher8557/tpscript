@@ -168,10 +168,7 @@ tpscript.instructions = {
 		print(tpscript.getthing(env, var))
 	end,
 	["not"] = function(env,var)
-		local v = tpscript.getthing(env, var)
-		if v == true or v == false then
-			env[var] = not v
-		end
+		env[var] = not tpscript.getthing(env, var)
 	end,
 	equ = function(env,writeto,var,var1)
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var

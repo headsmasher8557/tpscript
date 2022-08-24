@@ -63,9 +63,9 @@ function tpscript.getthing(env, str)
 	end
 	if str:sub(1, 1) == "$" and not tar then
 		local e = str:sub(2, #str)
-		local isbool = e == "true" or e == "false"
+		local isbool = (e == "true" or e == "false") or (e == "yes" or e == "no")
 		if isbool then
-			return e == "true"
+			return e == "true" or e == "yes"
 		else 
 			return nil
 		end

@@ -164,8 +164,10 @@ tpscript.instructions = {
 	logless = function(env,var)
 		print(env[var])
 	end,
-	log = function(env,var)
-		print(tpscript.getthing(env, var))
+	log = function(env, ...)
+		for _, variable in pairs({...}) do
+			print(tpscript.getthing(env, variable))
+		end
 	end,
 	["not"] = function(env,var)
 		env[var] = not tpscript.getthing(env, var)

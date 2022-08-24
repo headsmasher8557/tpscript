@@ -124,7 +124,9 @@ tpscript.instructions = {
 				table.insert(a, (tonumber(v) or env[v]) or tpscript.getthing(env,v) or v)
 			end
 		end
-		tpscript.getthing(env,var)(table.unpack(a))
+		if var ~= 'loadstring' then -- LOADSTRING ITS SO DANGER
+			tpscript.getthing(env,var)(table.unpack(a))
+		end
 	end,
 	callset = function(env, towrite, var, ...)
 		local args = {...}

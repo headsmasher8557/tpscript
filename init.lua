@@ -159,7 +159,7 @@ tpscript.instructions = {
 		env[var] = val == "true"
 	end,
 	set = function(env, var, path)
-		env[var] = tpscript.getthing(env,path)
+		env[var] = tonumber(path) or tpscript.getthing(env,path)
 	end,
 	logless = function(env,var)
 		print(env[var])

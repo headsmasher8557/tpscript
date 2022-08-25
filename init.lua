@@ -140,7 +140,7 @@ tpscript.instructions = {
 		env[var] = table.concat({...}, " ")
 	end,
 	logtxt = function(env,...)
-		print(...)
+		print(table.concat({...}, " "))
 	end,
 	setindex = function(env,var,index,...)
 		local args = {...}

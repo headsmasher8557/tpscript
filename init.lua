@@ -146,9 +146,7 @@ tpscript.instructions = {
 		local args = {...}
 		local a = {}
 		for i,v in pairs(args) do
-			if i ~= "n" then
-				table.insert(a, v)
-			end
+			table.insert(a, v)
 		end
 		local i = table.concat(a, " ")
 		local v = (tonumber(i) or env[i]) or tpscript.getthing(env,i) or i
@@ -220,7 +218,15 @@ tpscript.instructions = {
 		else
 			env[writeto] = #v
 		end
-	end
+	end,
+	setfindex = function(env, var, path, index, ...)
+        local args = {...}
+        local a = {}
+        for i,v in pairs(args) do
+			table.insert(a, v)
+		end
+        env[var] = tpscript.getthing(path)[tonumber(tpscript.getthing(index)) or tpscript.getthing(index) or tonumber(index) or index]
+    end
 }
 
 tpscript.globalenv = setmetatable({}, {__index = getfenv(0)})

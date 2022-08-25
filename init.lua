@@ -80,7 +80,7 @@ tpscript.instructions = {
 		end
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
 		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
-		
+
 		env[var] = v + v1
 	end,
 	sub = function(env, var, val)
@@ -89,7 +89,7 @@ tpscript.instructions = {
 		end
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
 		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
-		
+
 		env[var] = v - v1
 	end,
 	mul = function(env, var, val)
@@ -98,7 +98,7 @@ tpscript.instructions = {
 		end
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
 		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
-		
+
 		env[var] = v * v1
 	end,
 	div = function(env, var, val)
@@ -107,7 +107,7 @@ tpscript.instructions = {
 		end
 		local v = (tonumber(var) or env[var]) or tpscript.getthing(env,var) or var
 		local v1 = (tonumber(val) or env[val]) or tpscript.getthing(env,val) or val
-		
+
 		env[var] = v / v1
 	end,
 	copy = function(env, var, var1)
@@ -136,19 +136,15 @@ tpscript.instructions = {
 		end
 		env[towrite] = tpscript.getthing(env,var)(table.unpack(a))
 	end,
-	setstr = function(env,var,val)
-		env[var] = val
+	setstr = function(env,var,...)
+		env[var] = table.concat({...}, " ")
 	end,
-	logtxt = function(env,text)
-		print(text)
+	logtxt = function(env,...)
+		print(...)
 	end,
 	setindex = function(env,var,index,...)
 		local args = {...}
-		local a = {}
-		for i,v in pairs(args) do
-			table.insert(a, v)
-		end
-		local i = table.concat(a, " ")
+		local i = table.concat(args, " ")
 		local v = (tonumber(i) or env[i]) or tpscript.getthing(env,i) or i
 		i = v or i
 		env[var][index] = i
@@ -220,13 +216,13 @@ tpscript.instructions = {
 		end
 	end,
 	setfindex = function(env, var, path, index, ...)
-        local args = {...}
-        local a = {}
-        for i,v in pairs(args) do
+		local args = {...}
+		local a = {}
+		for i,v in pairs(args) do
 			table.insert(a, v)
 		end
-        env[var] = tpscript.getthing(path)[tonumber(tpscript.getthing(index)) or tpscript.getthing(index) or tonumber(index) or index]
-    end
+		env[var] = tpscript.getthing(path)[tonumber(tpscript.getthing(index)) or tpscript.getthing(index) or tonumber(index) or index]
+	end
 }
 
 tpscript.globalenv = setmetatable({}, {__index = getfenv(0)})
@@ -237,19 +233,13 @@ local function doinstruction(env,words)
 		table.insert(args, words[i])
 	end
 	local f = tpscript.instructions[words[1]]
-	if words[1] == "setstr" then
-		local bb = {}
-		for i = 3, #words do
-			table.insert(bb, words[i])
-		end
-		f(env, args[1], table.concat(bb, " "))
-	elseif words[1] == "logtxt" then
-		f(env, table.concat(args, " "))
-	else
-		if f then
-			f(env, table.unpack(args))
-		end
+	if f then
+		f(env, table.unpack(args))
+		
+		return
 	end
+	
+	error(("%s is an invalid instruction."):format(words[1]))
 end
 
 function tpscript.formatsrc(src) -- It would get so messy if i put all this on tpscript.loadstring function

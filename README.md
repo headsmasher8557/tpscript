@@ -1,27 +1,29 @@
 # TPScript
 
-A ~~really bad~~ work-in-progress scripting language that can access Lua globals.
+***Please do not take this project seriously, It was originally intended for a small joke.*** Any contributions are welcome, however, I won't pay much attention to them anymore.
 
-Example that runs inside of Roblox Luau:
+A ~~really bad~~ scripting language that can access Lua globals.
+
+Example that runs in Roblox Luau:
 ```
 callset part Instance.new Part workspace
 callset v3 Vector3.new 0 20 0
 
 setindex part Anchored $true
 
-add y 0
+add i 0
 ::loop
-add y 0.1
-callset t math.sin y
-callset r math.cos y
+add i 0.1
+callset t math.sin i
+callset r math.cos i
 set x v3.X
 set z v3.Z
-set u v3.Y
+set y v3.Y
 mul t 10
 mul r 10
-add u t
+add y t
 add x r
-callset v Vector3.new x u z
+callset v Vector3.new x y z
 setindex part Position v
 call wait 0.1
 jmp loop
@@ -31,9 +33,7 @@ Semicolons are also optional.
 set a 10;
 add a 5
 log a;
-```
-```
-15
+cmt Expected output: 15
 ```
 
 ## Notes

@@ -29,7 +29,7 @@ function tpscript.getthing(env, str)
 	local token = str:split'.'
 	local tar = getfenv(0)
 	local fail = false
-	for i,v in pairs(token) do
+	for i,v in next, token do
 		local tn = tonumber(v)
 		if tar[v] then
 			tar = tar[v]
@@ -45,7 +45,7 @@ function tpscript.getthing(env, str)
 	if fail then
 		tar = env
 		fail = false
-		for i,v in pairs(token) do
+		for i,v in next, token do
 			local tn = tonumber(v)
 			if tar[v] then
 				tar = tar[v]
@@ -119,7 +119,7 @@ tpscript.instructions = {
 	call = function(env, var, ...)
 		local args = {...}
 		local a = {}
-		for i,v in pairs(args) do
+		for i,v in next, args do
 			if i ~= "n" then
 				table.insert(a, (tonumber(v) or env[v]) or tpscript.getthing(env,v) or v)
 			end
@@ -129,7 +129,7 @@ tpscript.instructions = {
 	callset = function(env, towrite, var, ...)
 		local args = {...}
 		local a = {}
-		for i,v in pairs(args) do
+		for i,v in next, args do
 			if i ~= "n" then
 				table.insert(a, (tonumber(v) or env[v]) or tpscript.getthing(env,v) or v)
 			end
@@ -145,7 +145,7 @@ tpscript.instructions = {
 	setindex = function(env,var,index,...)
 		local args = {...}
 		local a = {}
-		for i,v in pairs(args) do
+		for i,v in next, args do
 			table.insert(a, v)
 		end
 		local i = table.concat(a, " ")
@@ -163,7 +163,7 @@ tpscript.instructions = {
 		print(env[var])
 	end,
 	log = function(env, ...)
-		for _, variable in pairs({...}) do
+		for _, variable in next, {...} do
 			print(tpscript.getthing(env, variable))
 		end
 	end,
@@ -222,7 +222,7 @@ tpscript.instructions = {
 	setfindex = function(env, var, path, index, ...)
         local args = {...}
         local a = {}
-        for i,v in pairs(args) do
+        for i,v in next, args do
 			table.insert(a, v)
 		end
         env[var] = tpscript.getthing(path)[tonumber(tpscript.getthing(index)) or tpscript.getthing(index) or tonumber(index) or index]
@@ -280,7 +280,7 @@ function tpscript.loadstring(src, useglobal)
 
 	local points = {}
 
-	for i,v in pairs(lines) do
+	for i,v in next, lines do
 		if v:sub(1, 2) == "::" then
 			local a = v:sub(3, -1)
 

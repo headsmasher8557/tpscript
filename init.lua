@@ -1,32 +1,20 @@
 local tpscript = {}
 
-if (_VERSION ~= "Luau") then
-	local canwrite = pcall(function()
-		function string:split(sep)
-			if not sep then
-				return self
-			end
-			local t={}
-			for str in string.gmatch(self, "([^"..sep.."]+)") do
-				table.insert(t, str)
-			end
-			return t
-		end
-	end)
-	if not canwrite then
-		error("Can't add split function, string library is read-only")
+local function split(str,sep)
+	if not sep then
+		return self
 	end
-
-	local canwrite = pcall(function()
-		table.unpack = unpack
-	end)
-	if not canwrite then
-		error("Can't add split function, table library is read-only")
+	local t={}
+	for str in string.gmatch(str, "([^"..sep.."]+)") do
+		table.insert(t, str)
 	end
+	return t
 end
 
+unpack = unpack or table.unpack
+
 function tpscript.getthing(env, str)
-	local token = str:split'.'
+	local token = split(str,'.')
 	local tar = getfenv(0)
 	local fail = false
 	for i,v in next, token do
@@ -124,7 +112,7 @@ tpscript.instructions = {
 				table.insert(a, (tonumber(v) or env[v]) or tpscript.getthing(env,v) or v)
 			end
 		end
-		tpscript.getthing(env,var)(table.unpack(a))
+		tpscript.getthing(env,var)(unpack(a))
 	end,
 	callset = function(env, towrite, var, ...)
 		local args = {...}
@@ -134,7 +122,7 @@ tpscript.instructions = {
 				table.insert(a, (tonumber(v) or env[v]) or tpscript.getthing(env,v) or v)
 			end
 		end
-		env[towrite] = tpscript.getthing(env,var)(table.unpack(a))
+		env[towrite] = tpscript.getthing(env,var)(unpack(a))
 	end,
 	setstr = function(env,var,val)
 		env[var] = val
@@ -247,13 +235,13 @@ local function doinstruction(env,words)
 		f(env, table.concat(args, " "))
 	else
 		if f then
-			f(env, table.unpack(args))
+			f(env, unpack(args))
 		end
 	end
 end
 
-function tpscript.formatsrc(src) -- It would get so messy if i put all this on tpscript.loadstring function
-	local lines = src:gsub("\n;", ";"):gsub("\n", ";"):split(";")--src:gsub("\n", ""):split(";")
+function tpscript.formatsrc(src) -- kys the code is already messy enough
+	local lines = split(src:gsub("\n;", ";"):gsub("\n", ";"),";")
 	for i = 1, #lines do
 		lines[i] = lines[i]:gsub("^%s*", "")
 	end
@@ -293,7 +281,7 @@ function tpscript.loadstring(src, useglobal)
 
 	local n = 1
 	while lines[n] do
-		local words = lines[n]:split(' ')
+		local words = split(lines[n], " ")
 		for i = 1, #words do
 			words[i] = words[i]:gsub("$space", " "):gsub("$\\space", "$space") -- couldn't find a better way to do this, tell me if you do
 		end

@@ -4,7 +4,7 @@
 
 A ~~really bad~~ scripting language that can access Lua globals.
 
-Example that runs in Roblox Luau:
+Example that runs in Roblox:
 ```
 callset part Instance.new Part workspace
 callset v3 Vector3.new 0 20 0
@@ -38,6 +38,6 @@ cmt Expected output: 15
 
 ## Notes
 
-If your Lua enviroment does not have a split function, the interpreter will attempt to add one to the string library and will error if it fails.
+This will not run if `string.split` does not exist in the environment because my dumbass first made this in Luau and did string parsing the lazy way
 
 And yes I know this is horrible

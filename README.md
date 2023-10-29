@@ -39,3 +39,5 @@ cmt Expected output: 15
 ## Notes
 
 If your Lua enviroment does not have a split function, the interpreter will attempt to add one to the string library and will error if it fails.
+
+And yes I know this is horrible
